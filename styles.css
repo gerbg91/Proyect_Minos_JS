@@ -1,0 +1,245 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap');
+
+:root {
+  --stone-dark:   #120d06;
+  --stone-mid:    #1e1408;
+  --stone-warm:   #2a1c0c;
+  --gold:         #c9a84c;
+  --gold-bright:  #e8cc80;
+  --gold-dim:     #8b6b28;
+  --gold-dark:    #5c4210;
+  --terracotta:   #b5451b;
+  --terra-bright: #d45a2a;
+  --ivory:        #f2ecd8;
+  --cream:        #d8c9a8;
+  --text-dim:     #c8a96e;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  background-color: var(--stone-dark);
+  background-image:
+    radial-gradient(ellipse at 15% 10%, rgba(46,28,12,0.9) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 90%, rgba(30,20,8,0.8) 0%, transparent 55%),
+    linear-gradient(165deg, #1e1408 0%, #120d06 50%, #0f0a03 100%);
+  color: var(--ivory);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+}
+
+/* Franja dorada superior */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-dim), var(--gold), var(--gold-dark));
+  z-index: 200;
+}
+
+/* Cenefa de zigzag estilo griego */
+body::after {
+  content: '';
+  position: fixed;
+  top: 4px; left: 0; right: 0;
+  height: 16px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='16'><polyline points='0,14 4,2 8,14 12,2 16,14 20,2' stroke='%23c9a84c' stroke-width='1.5' fill='none'/></svg>");
+  background-repeat: repeat-x;
+  background-size: 20px 16px;
+  z-index: 199;
+  opacity: 0.55;
+}
+
+.container { padding-top: 28px !important; }
+
+/* Títulos */
+.greek-title {
+  font-family: 'Cinzel', serif;
+  color: var(--gold);
+  letter-spacing: 0.12em;
+  font-weight: 700;
+  font-size: 1.8rem;
+  text-shadow: 0 0 30px rgba(201,168,76,0.4), 0 2px 8px rgba(0,0,0,0.9);
+  margin-bottom: 0.25rem;
+}
+
+.greek-title::after {
+  content: '';
+  display: block;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  margin-top: 6px;
+}
+
+.greek-subtitle {
+  color: var(--cream) !important;
+  font-size: 0.95rem;
+}
+
+/* Canvas - triple borde dorado */
+#mazeCanvas {
+  display: block;
+  max-width: 100%;
+  background: #d4c4a2;
+  box-shadow:
+    0 0 0 3px var(--gold-dark),
+    0 0 0 5px var(--gold),
+    0 0 0 7px var(--gold-dark),
+    0 12px 40px rgba(0,0,0,0.8);
+  border: none !important;
+}
+
+/* Cards */
+.card {
+  background: rgba(18,13,6,0.93) !important;
+  border: 1px solid var(--gold-dark) !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(201,168,76,0.08);
+}
+
+.card-header {
+  background: linear-gradient(90deg, rgba(201,168,76,0.1), rgba(201,168,76,0.03), rgba(201,168,76,0.1)) !important;
+  border-bottom: 1px solid var(--gold-dark) !important;
+  color: var(--gold) !important;
+  font-family: 'Cinzel', serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  padding: 0.6rem 1rem;
+  position: relative;
+}
+
+.card-header::before {
+  content: '\25C6';
+  margin-right: 0.5em;
+  font-size: 0.55em;
+  vertical-align: middle;
+  opacity: 0.7;
+}
+
+.card-header::after {
+  content: '\25C6';
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.55em;
+  opacity: 0.7;
+  color: var(--gold);
+  background-image: none;
+  width: auto;
+  height: auto;
+}
+
+.card-body { color: var(--ivory) !important; }
+
+/* Botón principal */
+.btn-primary {
+  background: linear-gradient(135deg, var(--gold) 0%, #a87828 100%);
+  border: 2px solid var(--gold-dark);
+  color: var(--stone-dark) !important;
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  font-size: 0.78rem;
+  padding: 0.45rem 1.2rem;
+  text-transform: uppercase;
+  box-shadow: 0 3px 12px rgba(201,168,76,0.35), inset 0 1px 0 rgba(255,255,255,0.15);
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background: linear-gradient(135deg, var(--gold-bright) 0%, var(--gold) 100%);
+  border-color: var(--gold);
+  box-shadow: 0 5px 20px rgba(201,168,76,0.55), inset 0 1px 0 rgba(255,255,255,0.25);
+  color: var(--stone-dark) !important;
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(201,168,76,0.3);
+}
+
+/* Controles de velocidad */
+.speed-controls button {
+  width: 36px;
+  height: 30px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--stone-warm), var(--stone-mid));
+  border: 1px solid var(--gold-dark) !important;
+  color: var(--gold) !important;
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1;
+  transition: all 0.15s ease;
+}
+
+.speed-controls button:hover {
+  background: linear-gradient(135deg, var(--gold-dark), var(--stone-warm));
+  border-color: var(--gold) !important;
+  color: var(--gold-bright) !important;
+}
+
+.speed-controls span {
+  min-width: 70px;
+  color: var(--cream);
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Texto de estado */
+#statusText {
+  color: var(--gold-bright);
+  font-family: 'Cinzel', serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+/* Colores del panel de leyenda */
+.text-player   { color: #c9a84c; }
+.text-minotaur { color: #d45a2a; }
+.text-exit     { color: #e8cc80; }
+.text-room     { color: var(--cream); }
+.text-item     { color: var(--gold-bright); font-weight: 600; }
+
+.reliquias-titulo {
+  color: var(--gold) !important;
+  font-family: 'Cinzel', serif;
+  letter-spacing: 0.06em;
+  border-top: 1px solid rgba(201,168,76,0.2);
+  padding-top: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.reliquias-lista li {
+  padding: 0.15rem 0;
+  font-size: 0.88rem;
+}
+
+/* Sobrescribir utilidades Bootstrap */
+.btn-outline-light {
+  color: var(--gold) !important;
+  border-color: var(--gold-dark) !important;
+}
+
+.text-muted  { color: var(--text-dim) !important; }
+.form-label  { color: var(--cream); font-size: 0.85rem; }
+
+.list-unstyled li {
+  padding: 0.25rem 0;
+  border-bottom: 1px solid rgba(201,168,76,0.07);
+  font-size: 0.9rem;
+}
+.list-unstyled li:last-child { border-bottom: none; }
+
+@media (max-width: 768px) {
+  .greek-title { font-size: 1.3rem; }
+  body::after  { display: none; }
+}
