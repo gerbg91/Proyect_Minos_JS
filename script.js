@@ -23,6 +23,10 @@ let items = [
 let minotaurInterval = null;
 let minotaurDelay = 300; // ms, menor = más rápido
 
+// Cuenta atrás inicial: nadie se mueve hasta que termina
+let countingDown = false;
+let countdownTimer = null;
+
 function createEmptyMaze() {
   maze = Array.from({ length: ROWS }, () => Array(COLS).fill(true));
 }
@@ -114,12 +118,77 @@ function endGame(message) {
   }
 }
 
+// Dibuja el laberinto y, encima, un velo oscuro con el texto de la cuenta atrás
+function drawCountdownOverlay(text) {
+  draw();
+  ctx.save();
+
+  // Velo oscuro sobre el laberinto
+  ctx.fillStyle = 'rgba(18,13,6,0.6)';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  const cx = canvas.width / 2;
+  const cy = canvas.height / 2;
+  const isNumber = /^\d+$/.test(text);
+
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.font = `bold ${canvas.width * (isNumber ? 0.34 : 0.18)}px 'Cinzel', Georgia, serif`;
+
+  // Resplandor dorado
+  ctx.shadowColor = 'rgba(232,204,128,0.85)';
+  ctx.shadowBlur = canvas.width * 0.06;
+
+  // Relleno con degradado dorado
+  const grad = ctx.createLinearGradient(cx, cy - canvas.width * 0.18, cx, cy + canvas.width * 0.18);
+  grad.addColorStop(0, '#e8cc80');
+  grad.addColorStop(1, '#a87828');
+  ctx.fillStyle = grad;
+  ctx.fillText(text, cx, cy);
+
+  // Contorno
+  ctx.shadowBlur = 0;
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = '#5c4210';
+  ctx.strokeText(text, cx, cy);
+
+  ctx.restore();
+}
+
+// Muestra 3, 2, 1, ¡Ya! y al terminar ejecuta onComplete
+function startCountdown(onComplete) {
+  countingDown = true;
+  if (countdownTimer) clearInterval(countdownTimer);
+
+  const steps = ['3', '2', '1', '¡Ya!'];
+  let i = 0;
+  drawCountdownOverlay(steps[i]);
+
+  countdownTimer = setInterval(() => {
+    i += 1;
+    if (i < steps.length) {
+      drawCountdownOverlay(steps[i]);
+    } else {
+      clearInterval(countdownTimer);
+      countdownTimer = null;
+      countingDown = false;
+      draw();
+      if (onComplete) onComplete();
+    }
+  }, 800);
+}
+
 function resetGame() {
   gameOver = false;
   if (minotaurInterval) {
     clearInterval(minotaurInterval);
     minotaurInterval = null;
   }
+  if (countdownTimer) {
+    clearInterval(countdownTimer);
+    countdownTimer = null;
+  }
+  countingDown = false;
   createEmptyMaze();
   carveMaze();
   createLoops();
@@ -135,10 +204,14 @@ function resetGame() {
 
   placeItems();
 
-  startMinotaurInterval();
-
   draw();
-  updateQuestStatus('Reune el Xifos y el Ovillo de oro para abrir la salida.');
+  statusText.textContent = 'Prepárate...';
+
+  // Nadie se mueve hasta que termina la cuenta atrás
+  startCountdown(() => {
+    startMinotaurInterval();
+    updateQuestStatus('Reune el Xifos y el Ovillo de oro para abrir la salida.');
+  });
 }
 
 // Coloca cada objeto en una celda libre alejada del jugador, la salida
@@ -630,7 +703,7 @@ function validMove(x, y) {
 }
 
 function movePlayer(dx, dy) {
-  if (gameOver) return;
+  if (gameOver || countingDown) return;
   const nextX = player.x + dx;
   const nextY = player.y + dy;
   if (!validMove(nextX, nextY)) return;

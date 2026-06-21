@@ -163,6 +163,29 @@ body::after {
   box-shadow: 0 2px 8px rgba(201,168,76,0.3);
 }
 
+/* Botón Nuevo laberinto: icono + texto */
+#newMazeBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.new-maze-icon {
+  font-size: 1.15em;
+  line-height: 1;
+  display: inline-block;
+  transition: transform 0.5s ease;
+}
+
+#newMazeBtn:hover .new-maze-icon,
+#newMazeBtn:focus .new-maze-icon {
+  transform: rotate(180deg);
+}
+
+#newMazeBtn:active .new-maze-icon {
+  transform: rotate(360deg);
+}
+
 /* Controles de velocidad */
 .speed-controls button {
   width: 36px;
