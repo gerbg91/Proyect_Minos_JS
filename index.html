@@ -3,73 +3,106 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Proyecto Minos - Laberinto</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&display=swap" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <title>Proyecto Minos · El Laberinto de Knossos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body class="greek-theme">
-  <div class="container py-4">
-    <div class="row mb-4">
-      <div class="col-md-8">
-        <h1 class="h3 greek-title">Proyecto Minos</h1>
-        <p class="mb-1 greek-subtitle">Explora un laberinto multicursal, encuentra la salida y evita al Minotauro.</p>
-        <p class="small greek-subtitle">Usa las flechas del teclado para moverte. El Minotauro se mueve solo cada cierto tiempo.</p>
+  <div class="meander-rail" aria-hidden="true"></div>
+
+  <main class="stage">
+    <header class="brand">
+      <div class="brand__id">
+        <p class="eyebrow">Creta · El Laberinto de Knossos</p>
+        <h1 class="brand__title">Proyecto Minos</h1>
       </div>
-      <div class="col-md-4 text-md-end align-self-center">
-        <button id="newMazeBtn" class="btn btn-primary" title="Generar un laberinto nuevo desde cero">
-          <span class="new-maze-icon" aria-hidden="true">&#x21bb;</span>
+    </header>
+
+    <div class="layout">
+      <!-- Panel izquierdo: acción, objetivo y velocidad -->
+      <aside class="panel panel--left">
+        <button id="newMazeBtn" class="btn-forge btn-forge--block" title="Generar un laberinto nuevo desde cero">
+          <span class="btn-forge__icon" aria-hidden="true">&#x21bb;</span>
           <span>Nuevo laberinto</span>
         </button>
-      </div>
-    </div>
 
-    <div class="row">
-      <div class="col-lg-8">
-        <div class="card">
-          <div class="card-body p-3 d-flex justify-content-center">
-            <canvas id="mazeCanvas" width="640" height="640"></canvas>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-4 mt-4 mt-lg-0">
-        <div class="card mb-3">
-          <div class="card-header">Información</div>
-          <div class="card-body">
-            <p id="statusText">Generando laberinto...</p>
-            <ul class="list-unstyled mb-2">
-              <li><span class="text-player">Guerrero:</span> casco bronce</li>
-              <li><span class="text-minotaur">Minotauro:</span> cabeza de toro</li>
-              <li><span class="text-exit">Salida:</span> portal dorado (sellado)</li>
-              <li><span class="text-room">Habitacion:</span> piedra rojiza</li>
-            </ul>
-            <p class="small mb-1 reliquias-titulo">Reliquias para abrir la salida:</p>
-            <ul class="list-unstyled mb-2 reliquias-lista">
-              <li><span class="text-item">⚔ Xifos:</span> la espada griega</li>
-              <li><span class="text-item">🧶 Ovillo de oro:</span> el hilo de Ariadna</li>
-            </ul>
-            <p class="small greek-subtitle">El Minotauro se mueve automáticamente cada <span id="minotaurInfo">300</span> ms, incluso si no te mueves.</p>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-header">Controles</div>
-          <div class="card-body">
-            <p class="mb-1">Flechas arriba, abajo, izquierda y derecha.</p>
-            <p class="mb-0">Pulsa <strong>Nuevo laberinto</strong> para reiniciar.</p>
-            <div class="mt-3">
-              <label class="form-label mb-1">Velocidad Minotauro</label>
-              <div class="d-flex align-items-center speed-controls">
-                <button id="speedDownBtn" class="btn btn-outline-light btn-sm me-2">-</button>
-                <span id="minotaurSpeedDisplay" class="me-2">300 ms</span>
-                <button id="speedUpBtn" class="btn btn-outline-light btn-sm">+</button>
-              </div>
-              <p class="small text-muted mt-2">Ajusta la velocidad con los botones.</p>
+        <section class="codex" aria-label="Objetivo de la partida">
+          <h2 class="codex__title">Objetivo</h2>
+          <p class="quest__goal">Reúne las dos reliquias para romper el sello y escapa del Minotauro.</p>
+          <div class="frieze">
+            <div class="relic" data-relic="xifos">
+              <span class="relic__medallion"><span class="relic__glyph">&#9876;</span></span>
+              <span class="relic__text">
+                <span class="relic__name">Xifos</span>
+                <span class="relic__state">Por hallar</span>
+              </span>
+            </div>
+            <div class="relic" data-relic="ovillo">
+              <span class="relic__medallion"><span class="relic__glyph">&#129526;</span></span>
+              <span class="relic__text">
+                <span class="relic__name">Ovillo de oro</span>
+                <span class="relic__state">Por hallar</span>
+              </span>
+            </div>
+            <span class="frieze__arrow" aria-hidden="true">&#10142;</span>
+            <div class="seal" data-seal>
+              <span class="seal__medallion"><span class="seal__glyph">&#10022;</span></span>
+              <span class="relic__text">
+                <span class="relic__name">Salida</span>
+                <span class="seal__state">Sellada</span>
+              </span>
             </div>
           </div>
-        </div>
-      </div>
+          <p id="statusText" class="herald">Generando laberinto…</p>
+        </section>
+
+        <section class="codex">
+          <h2 class="codex__title">Velocidad del Minotauro</h2>
+          <div class="speed">
+            <button id="speedDownBtn" class="speed__btn" aria-label="Más lento">&#9662;</button>
+            <span id="minotaurSpeedDisplay" class="speed__value">300 ms</span>
+            <button id="speedUpBtn" class="speed__btn" aria-label="Más rápido">&#9652;</button>
+          </div>
+          <p class="codex__hint">Da un paso cada <span id="minotaurInfo">300</span> ms. Menos milisegundos = más veloz.</p>
+        </section>
+      </aside>
+
+      <!-- Laberinto -->
+      <section class="arena" aria-label="Laberinto">
+        <canvas id="mazeCanvas" width="640" height="640"></canvas>
+      </section>
+
+      <!-- Panel derecho: leyenda y controles -->
+      <aside class="panel panel--right">
+        <section class="codex">
+          <h2 class="codex__title">Leyenda</h2>
+          <ul class="legend">
+            <li><span class="dot dot--player"></span> Guerrero — eres tú, casco de bronce</li>
+            <li><span class="dot dot--minotaur"></span> Minotauro — huye de él</li>
+            <li><span class="dot dot--exit"></span> Salida — portal solar (sellado)</li>
+            <li><span class="dot dot--xifos"></span> Xifos — la espada de Teseo</li>
+            <li><span class="dot dot--ovillo"></span> Ovillo — el hilo de Ariadna</li>
+            <li><span class="dot dot--room"></span> Guarida — piedra rojiza</li>
+          </ul>
+        </section>
+
+        <section class="codex">
+          <h2 class="codex__title">Controles</h2>
+          <p class="codex__hint">Muévete con las flechas del teclado o toca la cruz.</p>
+          <div class="dpad" role="group" aria-label="Controles de movimiento">
+            <button class="dpad__btn dpad__up" data-move="up" aria-label="Arriba">&#9650;</button>
+            <button class="dpad__btn dpad__left" data-move="left" aria-label="Izquierda">&#9664;</button>
+            <button class="dpad__btn dpad__center" aria-hidden="true" tabindex="-1"></button>
+            <button class="dpad__btn dpad__right" data-move="right" aria-label="Derecha">&#9654;</button>
+            <button class="dpad__btn dpad__down" data-move="down" aria-label="Abajo">&#9660;</button>
+          </div>
+        </section>
+      </aside>
     </div>
-  </div>
+  </main>
+
   <script src="script.js"></script>
 </body>
 </html>

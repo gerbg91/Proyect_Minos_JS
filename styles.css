@@ -1,268 +1,558 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap');
+/* ============================================================
+   Proyecto Minos — El Laberinto de Knossos
+   Identidad: cerámica de figuras negras (terracota + bronce)
+   sobre un corredor de piedra iluminado por antorchas.
+   ============================================================ */
 
 :root {
-  --stone-dark:   #120d06;
-  --stone-mid:    #1e1408;
-  --stone-warm:   #2a1c0c;
-  --gold:         #c9a84c;
-  --gold-bright:  #e8cc80;
-  --gold-dim:     #8b6b28;
-  --gold-dark:    #5c4210;
-  --terracotta:   #b5451b;
-  --terra-bright: #d45a2a;
-  --ivory:        #f2ecd8;
-  --cream:        #d8c9a8;
-  --text-dim:     #c8a96e;
+  --obsidian:      #0d0a06;
+  --obsidian-2:    #15100a;
+  --clay:          #b8551f;
+  --clay-deep:     #7c3814;
+  --clay-tint:     rgba(184, 85, 31, 0.14);
+  --bronze:        #c9a24b;
+  --bronze-bright: #ecd08a;
+  --bronze-deep:   #6e5114;
+  --bronze-line:   rgba(201, 162, 75, 0.32);
+  --ink:           #1a1009;
+  --ivory:         #f1e8d2;
+  --cream:         #d8c39a;
+  --muted:         #9c8254;
+  --terracotta:    #d45a2a;
+
+  --font-display: 'Cinzel', Georgia, serif;
+  --font-body:    'Cormorant Garamond', Georgia, serif;
+
+  --rule: 1px solid var(--bronze-line);
 }
 
 *, *::before, *::after { box-sizing: border-box; }
 
 body {
-  min-height: 100vh;
   margin: 0;
-  background-color: var(--stone-dark);
-  background-image:
-    radial-gradient(ellipse at 15% 10%, rgba(46,28,12,0.9) 0%, transparent 55%),
-    radial-gradient(ellipse at 85% 90%, rgba(30,20,8,0.8) 0%, transparent 55%),
-    linear-gradient(165deg, #1e1408 0%, #120d06 50%, #0f0a03 100%);
+  min-height: 100vh;
   color: var(--ivory);
-  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.5;
+  background-color: var(--obsidian);
+  background-image:
+    radial-gradient(ellipse at 12% 0%, rgba(184, 85, 31, 0.16) 0%, transparent 52%),
+    radial-gradient(ellipse at 88% 100%, rgba(110, 81, 20, 0.18) 0%, transparent 55%),
+    linear-gradient(168deg, #16100a 0%, #0d0a06 55%, #0a0703 100%);
 }
 
-/* Franja dorada superior */
-body::before {
-  content: '';
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-dim), var(--gold), var(--gold-dark));
-  z-index: 200;
-}
-
-/* Cenefa de zigzag estilo griego */
-body::after {
-  content: '';
-  position: fixed;
-  top: 4px; left: 0; right: 0;
-  height: 16px;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='16'><polyline points='0,14 4,2 8,14 12,2 16,14 20,2' stroke='%23c9a84c' stroke-width='1.5' fill='none'/></svg>");
+/* ---- Grega superior (el meandro = el laberinto) ---- */
+.meander-rail {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  height: 20px;
+  background-color: var(--obsidian);
+  border-bottom: 1px solid var(--bronze-deep);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='20'><g fill='none' stroke='%23c9a24b' stroke-width='2'><path d='M0 18 H32'/><path d='M5 18 V5 H27 V15 H13 V9 H21'/></g></svg>");
   background-repeat: repeat-x;
-  background-size: 20px 16px;
-  z-index: 199;
-  opacity: 0.55;
+  background-position: center;
+  background-size: 32px 20px;
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.6);
 }
 
-.container { padding-top: 28px !important; }
-
-/* Títulos */
-.greek-title {
-  font-family: 'Cinzel', serif;
-  color: var(--gold);
-  letter-spacing: 0.12em;
-  font-weight: 700;
-  font-size: 1.8rem;
-  text-shadow: 0 0 30px rgba(201,168,76,0.4), 0 2px 8px rgba(0,0,0,0.9);
-  margin-bottom: 0.25rem;
+/* ============================================================
+   Estructura
+   ============================================================ */
+.stage {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 1.25rem 1.5rem 2.5rem;
 }
 
-.greek-title::after {
-  content: '';
-  display: block;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--gold), transparent);
-  margin-top: 6px;
+/* ---- Cabecera de marca ---- */
+.brand {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+  text-align: center;
+  padding-bottom: 0.65rem;
+  margin-bottom: 1rem;
+  border-bottom: var(--rule);
 }
 
-.greek-subtitle {
-  color: var(--cream) !important;
-  font-size: 0.95rem;
+.brand__id {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-/* Canvas - triple borde dorado */
-#mazeCanvas {
-  display: block;
-  max-width: 100%;
-  background: #d4c4a2;
-  box-shadow:
-    0 0 0 3px var(--gold-dark),
-    0 0 0 5px var(--gold),
-    0 0 0 7px var(--gold-dark),
-    0 12px 40px rgba(0,0,0,0.8);
-  border: none !important;
-}
-
-/* Cards */
-.card {
-  background: rgba(18,13,6,0.93) !important;
-  border: 1px solid var(--gold-dark) !important;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(201,168,76,0.08);
-}
-
-.card-header {
-  background: linear-gradient(90deg, rgba(201,168,76,0.1), rgba(201,168,76,0.03), rgba(201,168,76,0.1)) !important;
-  border-bottom: 1px solid var(--gold-dark) !important;
-  color: var(--gold) !important;
-  font-family: 'Cinzel', serif;
-  font-size: 0.8rem;
-  letter-spacing: 0.1em;
+.eyebrow {
+  margin: 0 0 0.35rem;
+  font-family: var(--font-display);
+  font-size: 0.7rem;
   font-weight: 600;
-  padding: 0.6rem 1rem;
-  position: relative;
-}
-
-.card-header::before {
-  content: '\25C6';
-  margin-right: 0.5em;
-  font-size: 0.55em;
-  vertical-align: middle;
-  opacity: 0.7;
-}
-
-.card-header::after {
-  content: '\25C6';
-  position: absolute;
-  right: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 0.55em;
-  opacity: 0.7;
-  color: var(--gold);
-  background-image: none;
-  width: auto;
-  height: auto;
-}
-
-.card-body { color: var(--ivory) !important; }
-
-/* Botón principal */
-.btn-primary {
-  background: linear-gradient(135deg, var(--gold) 0%, #a87828 100%);
-  border: 2px solid var(--gold-dark);
-  color: var(--stone-dark) !important;
-  font-family: 'Cinzel', serif;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  font-size: 0.78rem;
-  padding: 0.45rem 1.2rem;
+  letter-spacing: 0.32em;
   text-transform: uppercase;
-  box-shadow: 0 3px 12px rgba(201,168,76,0.35), inset 0 1px 0 rgba(255,255,255,0.15);
-  transition: all 0.2s ease;
+  color: var(--muted);
 }
 
-.btn-primary:hover,
-.btn-primary:focus {
-  background: linear-gradient(135deg, var(--gold-bright) 0%, var(--gold) 100%);
-  border-color: var(--gold);
-  box-shadow: 0 5px 20px rgba(201,168,76,0.55), inset 0 1px 0 rgba(255,255,255,0.25);
-  color: var(--stone-dark) !important;
-  transform: translateY(-1px);
+.brand__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.8rem, 4.5vw, 2.6rem);
+  line-height: 0.95;
+  letter-spacing: 0.06em;
+  background: linear-gradient(180deg, var(--bronze-bright) 0%, var(--bronze) 55%, var(--bronze-deep) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 0 40px rgba(201, 162, 75, 0.18);
 }
 
-.btn-primary:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 8px rgba(201,168,76,0.3);
-}
-
-/* Botón Nuevo laberinto: icono + texto */
-#newMazeBtn {
+/* ---- Botón forja (acción principal) ---- */
+.btn-forge {
   display: inline-flex;
   align-items: center;
-  gap: 0.5em;
+  gap: 0.55em;
+  flex-shrink: 0;
+  padding: 0.7rem 1.4rem;
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink);
+  cursor: pointer;
+  background: linear-gradient(135deg, var(--bronze-bright) 0%, var(--bronze) 45%, var(--clay-deep) 130%);
+  border: 1px solid var(--bronze-bright);
+  border-radius: 2px;
+  box-shadow: 0 4px 18px rgba(201, 162, 75, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
 }
 
-.new-maze-icon {
-  font-size: 1.15em;
+.btn-forge:hover,
+.btn-forge:focus-visible {
+  transform: translateY(-2px);
+  filter: brightness(1.08);
+  box-shadow: 0 7px 26px rgba(201, 162, 75, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.btn-forge:active { transform: translateY(0); }
+
+.btn-forge--block {
+  width: 100%;
+  justify-content: center;
+  padding-block: 0.85rem;
+}
+
+.btn-forge__icon {
+  font-size: 1.25em;
   line-height: 1;
-  display: inline-block;
   transition: transform 0.5s ease;
 }
 
-#newMazeBtn:hover .new-maze-icon,
-#newMazeBtn:focus .new-maze-icon {
-  transform: rotate(180deg);
+.btn-forge:hover .btn-forge__icon,
+.btn-forge:focus-visible .btn-forge__icon { transform: rotate(180deg); }
+.btn-forge:active .btn-forge__icon { transform: rotate(360deg); }
+
+/* ============================================================
+   Friso de objetivo — el elemento firma
+   ============================================================ */
+.quest__goal {
+  margin: 0 0 0.9rem;
+  font-size: 1rem;
+  color: var(--cream);
 }
 
-#newMazeBtn:active .new-maze-icon {
-  transform: rotate(360deg);
+.frieze {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
-/* Controles de velocidad */
-.speed-controls button {
-  width: 36px;
-  height: 30px;
+.relic,
+.seal {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  width: 100%;
+  padding: 0.45rem 0.7rem;
+  background: rgba(13, 10, 6, 0.6);
+  border: 1px solid rgba(156, 130, 84, 0.22);
+  border-radius: 2px;
+  transition: border-color 0.35s ease, background 0.35s ease, box-shadow 0.35s ease;
+}
+
+.relic__medallion,
+.seal__medallion {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  font-size: 1.3rem;
+  color: #6f6657;
+  background: radial-gradient(circle at 35% 30%, #4a4338, #211c14);
+  border: 1px solid #4a4338;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.6);
+  transition: all 0.4s ease;
+  filter: grayscale(1) brightness(0.75);
+}
+
+.relic__glyph, .seal__glyph { line-height: 1; }
+
+.relic__text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.relic__name {
+  font-family: var(--font-display);
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--cream);
+}
+
+.relic__state,
+.seal__state {
+  font-size: 0.82rem;
+  font-style: italic;
+  color: var(--muted);
+}
+
+/* Estado: reliquia recogida */
+.relic.is-collected {
+  border-color: var(--bronze);
+  background: rgba(201, 162, 75, 0.08);
+  box-shadow: 0 0 18px rgba(201, 162, 75, 0.18);
+}
+
+.relic.is-collected .relic__medallion {
+  filter: none;
+  color: var(--ink);
+  background: radial-gradient(circle at 35% 30%, var(--bronze-bright), var(--clay-deep));
+  border-color: var(--bronze-bright);
+  box-shadow: 0 0 16px rgba(236, 208, 138, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  animation: relic-pop 0.5s ease;
+}
+
+.relic.is-collected .relic__state { color: var(--bronze-bright); font-style: normal; }
+
+/* Flecha hacia el sello (apunta hacia abajo en el panel) */
+.frieze__arrow {
+  align-self: center;
+  font-size: 1.2rem;
+  line-height: 0.6;
+  color: var(--bronze-deep);
+  transform: rotate(90deg);
+}
+
+/* Sello de salida */
+.seal .relic__name { color: var(--bronze); }
+
+.seal.is-open {
+  border-color: var(--bronze-bright);
+  background: rgba(236, 208, 138, 0.1);
+  box-shadow: 0 0 26px rgba(236, 208, 138, 0.3);
+}
+
+.seal.is-open .seal__medallion {
+  filter: none;
+  color: var(--ink);
+  background: radial-gradient(circle at 35% 30%, #fff0c8, var(--bronze));
+  border-color: var(--bronze-bright);
+  box-shadow: 0 0 22px rgba(236, 208, 138, 0.7);
+  animation: seal-pulse 1.8s ease-in-out infinite;
+}
+
+.seal.is-open .seal__state { color: var(--bronze-bright); font-style: normal; }
+
+@keyframes relic-pop {
+  0%   { transform: scale(0.6); }
+  60%  { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+@keyframes seal-pulse {
+  0%, 100% { box-shadow: 0 0 18px rgba(236, 208, 138, 0.5); }
+  50%      { box-shadow: 0 0 30px rgba(236, 208, 138, 0.95); }
+}
+
+/* ============================================================
+   Heraldo (estado de la partida)
+   ============================================================ */
+.herald {
+  margin: 0.9rem 0 0;
+  padding: 0.6rem 0.85rem;
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--bronze-bright);
+  border-left: 3px solid var(--bronze);
+  background: linear-gradient(90deg, rgba(201, 162, 75, 0.1), transparent);
+}
+
+.herald--victory {
+  color: var(--bronze-bright);
+  border-left-color: var(--bronze-bright);
+  background: linear-gradient(90deg, rgba(236, 208, 138, 0.22), transparent);
+}
+
+.herald--defeat {
+  color: #f1b59a;
+  border-left-color: var(--terracotta);
+  background: linear-gradient(90deg, rgba(212, 90, 42, 0.2), transparent);
+}
+
+/* ============================================================
+   Disposición principal: arena + panel
+   ============================================================ */
+.layout {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr) 280px;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+/* ---- Arena del laberinto ---- */
+.arena {
+  position: sticky;
+  top: 1rem;
+  align-self: start;
+  display: flex;
+  justify-content: center;
+  padding: 14px;
+  background:
+    repeating-linear-gradient(135deg, rgba(0,0,0,0.18) 0 2px, transparent 2px 6px),
+    linear-gradient(160deg, #1c140b, #110b05);
+  border: 1px solid var(--bronze-deep);
+  border-radius: 3px;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.7), inset 0 0 0 1px rgba(0, 0, 0, 0.5);
+}
+
+#mazeCanvas {
+  display: block;
+  width: 100%;
+  max-width: min(640px, calc(100vh - 9rem));
+  height: auto;
+  background: #d4c4a2;
+  box-shadow:
+    0 0 0 3px var(--bronze-deep),
+    0 0 0 5px var(--bronze),
+    0 0 0 7px var(--bronze-deep),
+    0 10px 34px rgba(0, 0, 0, 0.7);
+}
+
+/* ---- Panel lateral ---- */
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.codex {
+  padding: 0.9rem 1.1rem 1rem;
+  background: linear-gradient(180deg, rgba(184, 85, 31, 0.06), rgba(13, 10, 6, 0.7));
+  border: var(--rule);
+  border-radius: 3px;
+  box-shadow: inset 0 1px 0 rgba(201, 162, 75, 0.07);
+}
+
+.codex__title {
+  margin: 0 0 0.85rem;
+  padding-bottom: 0.5rem;
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--bronze);
+  border-bottom: 1px solid var(--bronze-line);
+}
+
+.codex__title::before {
+  content: '\25C6';
+  margin-right: 0.6em;
+  font-size: 0.6em;
+  vertical-align: 0.2em;
+  color: var(--clay);
+}
+
+.codex__hint {
+  margin: 0.75rem 0 0;
+  font-size: 0.92rem;
+  color: var(--muted);
+}
+
+/* ---- Leyenda ---- */
+.legend {
+  list-style: none;
+  margin: 0;
   padding: 0;
-  display: inline-flex;
+  font-size: 0.96rem;
+}
+
+.legend li {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.34rem 0;
+  color: var(--cream);
+  border-bottom: 1px solid rgba(201, 162, 75, 0.08);
+}
+.legend li:last-child { border-bottom: none; }
+
+.dot {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.45);
+}
+.dot--player   { background: radial-gradient(circle at 35% 30%, var(--bronze-bright), var(--bronze-deep)); }
+.dot--minotaur { background: radial-gradient(circle at 35% 30%, var(--terracotta), #4a1208); }
+.dot--exit     { background: radial-gradient(circle at 35% 30%, #fff0c8, var(--bronze)); }
+.dot--xifos    { background: radial-gradient(circle at 35% 30%, #f4f1e6, #8d8878); }
+.dot--ovillo   { background: radial-gradient(circle at 35% 30%, #f6e29a, #9c7818); }
+.dot--room     { background: var(--clay); }
+
+/* ---- Control de velocidad ---- */
+.speed {
+  display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, var(--stone-warm), var(--stone-mid));
-  border: 1px solid var(--gold-dark) !important;
-  color: var(--gold) !important;
-  font-size: 1.1rem;
-  font-weight: 700;
-  line-height: 1;
+  gap: 0.85rem;
+}
+
+.speed__btn {
+  width: 42px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  font-size: 1rem;
+  color: var(--bronze);
+  cursor: pointer;
+  background: linear-gradient(135deg, var(--obsidian-2), #261a0d);
+  border: 1px solid var(--bronze-deep);
+  border-radius: 2px;
   transition: all 0.15s ease;
 }
 
-.speed-controls button:hover {
-  background: linear-gradient(135deg, var(--gold-dark), var(--stone-warm));
-  border-color: var(--gold) !important;
-  color: var(--gold-bright) !important;
+.speed__btn:hover,
+.speed__btn:focus-visible {
+  color: var(--ink);
+  background: linear-gradient(135deg, var(--bronze), var(--clay-deep));
+  border-color: var(--bronze-bright);
 }
 
-.speed-controls span {
-  min-width: 70px;
-  color: var(--cream);
-  font-weight: 600;
+.speed__value {
+  min-width: 78px;
   text-align: center;
-}
-
-/* Texto de estado */
-#statusText {
-  color: var(--gold-bright);
-  font-family: 'Cinzel', serif;
-  font-size: 0.82rem;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
   font-weight: 600;
-  letter-spacing: 0.04em;
+  color: var(--cream);
 }
 
-/* Colores del panel de leyenda */
-.text-player   { color: #c9a84c; }
-.text-minotaur { color: #d45a2a; }
-.text-exit     { color: #e8cc80; }
-.text-room     { color: var(--cream); }
-.text-item     { color: var(--gold-bright); font-weight: 600; }
-
-.reliquias-titulo {
-  color: var(--gold) !important;
-  font-family: 'Cinzel', serif;
-  letter-spacing: 0.06em;
-  border-top: 1px solid rgba(201,168,76,0.2);
-  padding-top: 0.5rem;
-  margin-top: 0.5rem;
+/* ---- D-pad táctil ---- */
+.dpad {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-areas:
+    ".    up    ."
+    "left mid  right"
+    ".    down  .";
+  gap: 0.4rem;
+  max-width: 190px;
 }
 
-.reliquias-lista li {
-  padding: 0.15rem 0;
-  font-size: 0.88rem;
+.dpad__up    { grid-area: up; }
+.dpad__left  { grid-area: left; }
+.dpad__center{ grid-area: mid; }
+.dpad__right { grid-area: right; }
+.dpad__down  { grid-area: down; }
+
+.dpad__btn {
+  height: 48px;
+  display: grid;
+  place-items: center;
+  font-size: 0.95rem;
+  color: var(--bronze);
+  cursor: pointer;
+  background: linear-gradient(135deg, var(--obsidian-2), #261a0d);
+  border: 1px solid var(--bronze-deep);
+  border-radius: 2px;
+  transition: all 0.12s ease;
 }
 
-/* Sobrescribir utilidades Bootstrap */
-.btn-outline-light {
-  color: var(--gold) !important;
-  border-color: var(--gold-dark) !important;
+.dpad__btn:hover,
+.dpad__btn:focus-visible {
+  color: var(--ink);
+  background: linear-gradient(135deg, var(--bronze), var(--clay-deep));
+  border-color: var(--bronze-bright);
 }
 
-.text-muted  { color: var(--text-dim) !important; }
-.form-label  { color: var(--cream); font-size: 0.85rem; }
+.dpad__btn:active { transform: scale(0.94); }
 
-.list-unstyled li {
-  padding: 0.25rem 0;
-  border-bottom: 1px solid rgba(201,168,76,0.07);
-  font-size: 0.9rem;
+.dpad__center {
+  pointer-events: none;
+  background: transparent;
+  border-color: rgba(201, 162, 75, 0.12);
 }
-.list-unstyled li:last-child { border-bottom: none; }
 
-@media (max-width: 768px) {
-  .greek-title { font-size: 1.3rem; }
-  body::after  { display: none; }
+/* ============================================================
+   Accesibilidad
+   ============================================================ */
+:focus-visible {
+  outline: 2px solid var(--bronze-bright);
+  outline-offset: 2px;
+}
+
+/* ============================================================
+   Responsivo
+   ============================================================ */
+/* Tablet ancha: paneles algo más estrechos */
+@media (max-width: 1120px) {
+  .layout {
+    grid-template-columns: 250px minmax(0, 1fr) 250px;
+    gap: 1.1rem;
+  }
+}
+
+/* Pantallas estrechas: una sola columna con el laberinto arriba */
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+  .arena {
+    position: static;
+    order: -1;
+  }
+  .panel {
+    max-width: 640px;
+    width: 100%;
+    margin: 0 auto;
+  }
+  .dpad { margin-inline: auto; }
+}
+
+@media (max-width: 540px) {
+  .stage { padding: 1.25rem 1rem 3rem; }
+  .frieze__arrow { display: none; }
+  .relic, .seal { flex-basis: 100%; }
+  body { font-size: 16px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
 }

@@ -112,6 +112,8 @@ function makeMinotaurRoom() {
 function endGame(message) {
   gameOver = true;
   statusText.textContent = message;
+  statusText.classList.remove('herald--victory', 'herald--defeat');
+  statusText.classList.add(/ganado/i.test(message) ? 'herald--victory' : 'herald--defeat');
   if (minotaurInterval) {
     clearInterval(minotaurInterval);
     minotaurInterval = null;
@@ -205,12 +207,13 @@ function resetGame() {
   placeItems();
 
   draw();
+  statusText.classList.remove('herald--victory', 'herald--defeat');
   statusText.textContent = 'Prepárate...';
 
   // Nadie se mueve hasta que termina la cuenta atrás
   startCountdown(() => {
     startMinotaurInterval();
-    updateQuestStatus('Reune el Xifos y el Ovillo de oro para abrir la salida.');
+    updateQuestStatus('');
   });
 }
 
@@ -263,15 +266,14 @@ function allItemsCollected() {
 }
 
 function updateQuestStatus(prefix) {
-  const got = items.filter(it => it.collected).map(it => it.name);
-  const pending = items.filter(it => !it.collected).map(it => it.name);
+  const pending = items.filter(it => !it.collected).length;
   let msg = prefix ? prefix + ' ' : '';
-  if (pending.length === 0) {
-    msg += 'Tienes todas las reliquias: la salida esta abierta.';
+  if (pending === 0) {
+    msg += '¡La salida está abierta! Corre al portal.';
   } else {
-    msg += `Recogido: ${got.length ? got.join(', ') : 'nada'}. Falta: ${pending.join(', ')}.`;
+    msg += pending === 1 ? 'Te queda una reliquia.' : 'Reúne las dos reliquias.';
   }
-  statusText.textContent = msg;
+  statusText.textContent = msg.trim();
 }
 
 function startMinotaurInterval() {
@@ -696,6 +698,28 @@ function draw() {
     minotaur.x * CELL_SIZE + CELL_SIZE / 2,
     minotaur.y * CELL_SIZE + CELL_SIZE / 2
   );
+
+  syncHud();
+}
+
+// Sincroniza el friso de objetivo con el estado de la partida:
+// reliquias recogidas y sello de la salida.
+function syncHud() {
+  items.forEach(it => {
+    const el = document.querySelector(`[data-relic="${it.id}"]`);
+    if (!el) return;
+    el.classList.toggle('is-collected', it.collected);
+    const state = el.querySelector('.relic__state');
+    if (state) state.textContent = it.collected ? 'En tu poder' : 'Por hallar';
+  });
+
+  const seal = document.querySelector('[data-seal]');
+  if (seal) {
+    const open = allItemsCollected();
+    seal.classList.toggle('is-open', open);
+    const state = seal.querySelector('.seal__state');
+    if (state) state.textContent = open ? 'Abierta' : 'Sellada';
+  }
 }
 
 function validMove(x, y) {
@@ -828,6 +852,20 @@ if (speedUpBtn) {
     setMinotaurDelay(minotaurDelay - 50); // disminuir ms = más rápido
   });
 }
+
+// Controles táctiles (D-pad) — reutilizan movePlayer
+const moveMap = {
+  up:    [0, -1],
+  down:  [0, 1],
+  left:  [-1, 0],
+  right: [1, 0]
+};
+document.querySelectorAll('[data-move]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const [dx, dy] = moveMap[btn.dataset.move] || [0, 0];
+    movePlayer(dx, dy);
+  });
+});
 
 resetGame();
 
